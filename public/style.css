@@ -1,0 +1,12 @@
+body{
+    margin:5%;
+}
+
+#exampleInputEmail1, #exampleInputPassword1, #exampleInputName{
+    width: 100%;
+}
+
+#log{
+    display: flex;
+    justify-content: space-between;
+}
