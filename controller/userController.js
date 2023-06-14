@@ -57,10 +57,35 @@ const signUp = async (req, res) => {
     }
 }
 
+const logIn = async (req, res) => {
+    //Check if the user is already in the DB 
+    let existedUser = await signupModel.findOne({email: req.body.email});
+    
+    if(!existedUser) {
+     res.render('outh', {
+         error : "user is not exist. So signup first please!",
+         
+     })
+     }else{
+     let isCorrectPass = bcrypt.compareSync(req.body.password, existedUser.password)
+ 
+     if(!isCorrectPass){
+      res.render('outh', {
+             error : "user password is not correct"
+
+         })  
+     }else{
+         let userToken = jwt.sign({existedUser}, process.env.JWT_TEXT);
+         res.cookie("userToken", userToken, {httpOnly: true});
+         res.redirect('/')
+     }
+     }
+    }
 module.exports = {
     homePage,
     loginUser,
     questionAddition,
     postQuestion,
-    signUp
+    signUp,
+    logIn
 }
