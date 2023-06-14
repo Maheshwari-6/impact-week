@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
+const schema = mongoose.Schema;
+
 const commentSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        required: false
-    },
+    userId: { type: schema.Types.ObjectId, ref: 'signup' },
     text: {
         type: String,
         required: true

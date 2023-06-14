@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const homePage = (req, res) => { 
     user.find()
     //.sort({create_at : '-1'})
-    .then((result) => {res.render('homePage', {user : result})})
+    .then((result) => {res.render('homePage', {question : result})})
     .catch(err => console.log(err))   
 } 
 
@@ -22,7 +22,10 @@ const questionAddition = (req, res) => {
 }
 
 const postQuestion = (req,res) =>{
-    let newUser = new user(req.body);
+    let newUser = new user({
+        ...req.body,
+        userId: res.locals.userId
+      });
     newUser.save()
     .then((result) => res.redirect('/'))
     .catch(err => res.render('addQuestion'))

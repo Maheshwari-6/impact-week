@@ -2,12 +2,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const userSchema = new schema({
-    userId: {
-        //TODO: add user id when integrating with login
-        type: String,
-        required: false
-        
-    },
+    userId: { type: schema.Types.ObjectId, ref: 'signup' },
     question :{
         type: String, 
         required : true

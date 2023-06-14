@@ -18,34 +18,46 @@
     <div>
         <h1><%= question.question%></h1>
         <h2><%= question.desc%></h2>
-        <h2><%= question.userId%></h2>
+        <h2>Posted by: <%= question.userId.userName%></h2>
         <h2><%= question.formattedDate%></h2>
+        <% if(user) { %>
+            <h2>Logged as <%= user%></h2>
+        <% } %>
 
-        <a href="/question/edit/<%=question._id %>"><button class="btn btn-success" >Edit question</button></a>
+        <% if(user && question.userId._id.toString() === userId.toString()) { %>
+            <a href="/question/edit/<%=question._id %>"><button class="btn btn-success" >Edit question</button></a>
+        <% } %>
+
         
         <form action="/delete-question/<%= question._id %>" method="post">
-            
-            <button class="btn btn-danger">Delete</button>
+            <% if(user && question.userId._id.toString() === userId.toString()) { %>
+                <button class="btn btn-danger">Delete</button>
+            <% } %>
+    
 
         </form>
 
-        <form action="/question/<%=question._id %>/comment" method="post" id="form-add-question">
+
+        <% if(user) { %>
+            <form action="/question/<%=question._id %>/comment" method="post" id="form-add-question">
         
-            <div class="adding-comment">
-                <p>Add A Comment</p>
+                <div class="adding-comment">
+                    <p>Add A Comment</p>
+                    
+                    <input type="text" name="text" id="new-comment-question">
+            
+                </div>
                 
-                <input type="text" name="text" id="new-comment-question">
-        
-            </div>
-            
-                <button id="sub-btn">Submit</button>
-            </form>
+                    <button id="sub-btn">Submit</button>
+                </form>
+    
+                
+    
+           
+    
+            </form>    
+        <% } %>
 
-            
-
-       
-
-        </form>
 
         <div class="comment-list">
             <% for (let i=0; i<question.comments.length;i++) {%>           
@@ -55,17 +67,20 @@
                 <div class="text">
                     <h3><span><%=question.comments[i].text%></span></h3>
                     <p>Added at: <%= question.comments[i].createdAt%></p>
-                    <p>Posted by: <%= question.comments[i].userId%></p>                    
-                    <form action="/question/<%= question._id %>/delete-comment/<%=question.comments[i]._id %>" method="post" id="form-delete-comment">
+                    <p>Posted by: <%= question.comments[i].userId.userName%></p>
+                    <% if(user && (question.userId._id.toString() === userId.toString() || question.comments[i].userId._id.toString() === userId.toString())) { %>
+                        <form action="/question/<%= question._id %>/delete-comment/<%=question.comments[i]._id %>" method="post" id="form-delete-comment">
         
-                        <div class="deleting-comment">
-                                                        
-                            <button id="sub-btn">Delete</button>
-                    
-                        </div>
+                            <div class="deleting-comment">
+                                                            
+                                <button id="sub-btn">Delete</button>
                         
+                            </div>
                             
-                    </form> 
+                                
+                        </form>     
+                    <% } %>
+                            
                 </div>
             </div>
             <% } %>
