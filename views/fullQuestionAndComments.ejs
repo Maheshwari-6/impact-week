@@ -12,16 +12,16 @@
 <body>
     
     <div>
-    <a href="/"><button class="btn btn-warning">Homepage</button></a>
+    <a href="/"><button class="btn btn-warning btn-home" id="back-to-home">Home</button></a>
     </div>
 
     <div>
         <h1><%= question.question%></h1>
         <h2><%= question.desc%></h2>
         <h2><%= question.userId%></h2>
-        <h2><%= question.createdAt%></h2>
+        <h2><%= question.formattedDate%></h2>
 
-        <a href="/question/edit/<%=question._id %>"><button class="btn btn-success">Edit question</button></a>
+        <a href="/question/edit/<%=question._id %>"><button class="btn btn-success" >Edit question</button></a>
         
         <form action="/delete-question/<%= question._id %>" method="post">
             
@@ -41,6 +41,7 @@
                 <button id="sub-btn">Submit</button>
             </form>
 
+            
 
        
 
@@ -54,8 +55,17 @@
                 <div class="text">
                     <h3><span><%=question.comments[i].text%></span></h3>
                     <p>Added at: <%= question.comments[i].createdAt%></p>
-                    <p>Posted by: <%= question.comments[i].userId%></p>
+                    <p>Posted by: <%= question.comments[i].userId%></p>                    
+                    <form action="/question/<%= question._id %>/delete-comment/<%=question.comments[i]._id %>" method="post" id="form-delete-comment">
+        
+                        <div class="deleting-comment">
+                                                        
+                            <button id="sub-btn">Delete</button>
                     
+                        </div>
+                        
+                            
+                    </form> 
                 </div>
             </div>
             <% } %>
