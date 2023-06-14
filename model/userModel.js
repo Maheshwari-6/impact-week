@@ -1,25 +1,23 @@
-const moment = require('moment/moment');
 const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const userSchema = new schema({
+    userId: {
+        //TODO: add user id when integrating with login
+        type: String,
+        required: false
+        
+    },
     question :{
         type: String, 
-        required : false
+        required : true
     },
 
     desc :{
         type: String, 
-        required : false
+        required : true
     },
-
-    create_at:{
-        type: Date,
-        default:Date.now,
-        get: function(createAt){
-            return moment(createAt).format('MMMM Do YYYY, h:mm:ss a')
-        }
-    }
+    comments: [{ type: schema.Types.ObjectId, ref: 'comment' }]
 }, {timestamps:true})
 
 
