@@ -1,72 +1,95 @@
-const question = require('../model/userModel')
-const comment = require('../model/comment')
+const question = require("../model/userModel");
+const comment = require("../model/comment");
+const moment = require("moment");
 
-const getQuestionDetails = (req, res) =>{
-    question.findById(req.params.id)
-    .populate('comments')
-    .then(result => {
-        res.render('fullQuestionAndComments' , {
-            question: result,
-        })
+const getQuestionDetails = (req, res) => {
+  question
+    .findById(req.params.id)
+    .populate("comments")
+    .then((result) => {
+      res.render("fullQuestionAndComments", {
+        question: {
+          ...result._doc,
+          formattedDate: moment(result.createdAt).format("YYYY-MM-DD"),
+        },
+      });
     })
-    .catch(err => console.log(err))
-}
-
+    .catch((err) => console.log(err));
+};
 
 //Edit question
 
-const editQuestion =(req, res) =>{
-    question.findById(req.params.id)
-    .then(result => {
-        res.render('editQuestion' , {
-            question: result,
-        })
+const editQuestion = (req, res) => {
+  question
+    .findById(req.params.id)
+    .then((result) => {
+     /*  console.log({
+        ...result._doc,
+        formattedDate: moment(result.createdAt).format("YYYY-MM-DD"),
+      }); */
+      res.render("editQuestion", {
+        question: { ...result._doc },
+      });
     })
-    .catch(err => {res.render('404')
-})
-}
+    .catch((err) => {
+      res.render("404");
+    });
+};
 
-const updateQuestion = (req, res) =>{
-    question.findByIdAndUpdate(req.params.id, req.body)
-    .then(result => {
-     res.redirect(`/question/${result._id}`)
+const updateQuestion = (req, res) => {
+  question
+    .findByIdAndUpdate(req.params.id, req.body)
+    .then((result) => {
+      res.redirect(`/question/${result._id}`);
     })
-    .catch(err => console.log(err))
- }
+    .catch((err) => console.log(err));
+};
 
-
- const deleteQuestion = (req, res) => {
-    question.findByIdAndDelete(req.params.id)
-    .then(()=> {res.redirect('/')})
-    .catch(err =>{ console.log(err)});    
-}
-
-
-const addComment = (req, res) => {    
-    let newComment = new comment( {
-        ...req.body,
-        questionId: req.params.id
-    }); 
-
-    newComment.save()
-    .then(result => {
-        question.findById(req.params.id)
-        .then(foundQuestion => {
-            foundQuestion.comments.push(result)
-            foundQuestion.save()
-            .then(res.redirect(`/question/${req.params.id}`))
-        })
+//delete question
+const deleteQuestion = (req, res) => {
+  question
+    .findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.redirect("/");
     })
-    .catch(err => console.log(err))
-}
- 
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
+const addComment = (req, res) => {
+  let newComment = new comment({
+    ...req.body,
+    questionId: req.params.id,
+  });
 
- module.exports={
-    getQuestionDetails,
-    editQuestion,
-    updateQuestion,
-    deleteQuestion,
-    addComment
+  newComment
+    .save()
+    .then((result) => {
+      question.findById(req.params.id).then((foundQuestion) => {
+        foundQuestion.comments.push(result);
+        foundQuestion.save().then(res.redirect(`/question/${req.params.id}`));
+      });
+    })
+    .catch((err) => console.log(err));
+};
 
-}
+//delete comment
+const deleteComment = (req, res) => {
+  comment.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.redirect(`/question/${req.params.question}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+module.exports = {
+  getQuestionDetails,
+  editQuestion,
+  updateQuestion,
+  deleteQuestion,
+  addComment,
+  deleteComment,
+};

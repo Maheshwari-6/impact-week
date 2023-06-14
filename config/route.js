@@ -32,5 +32,10 @@ route.post('/delete-question/:id', fullQuestionController.deleteQuestion);
 
 route.post('/question/:id/comment',fullQuestionController.addComment);
 
+//Delete the comment of a question
+
+route.post('/question/:question/delete-comment/:id',fullQuestionController.deleteComment);
+
+
 
 module.exports = route;
