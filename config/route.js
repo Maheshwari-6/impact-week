@@ -9,6 +9,7 @@ const route = express.Router();
 route.get('/', auth.checkHomePageToken, userController.homePage);
 route.post('/new-account', userController.signUp);
 route.post('/login', userController.logIn);
+route.post('/logout', userController.logOut);
 
 route.get('/outh', userController.loginUser);
 

@@ -84,11 +84,18 @@ const logIn = async (req, res) => {
      }
      }
     }
+
+const logOut = (req, res) => {
+    res.clearCookie('userToken');
+    res.redirect('/');
+}  
+
 module.exports = {
     homePage,
     loginUser,
     questionAddition,
     postQuestion,
     signUp,
-    logIn
+    logIn,
+    logOut
 }
