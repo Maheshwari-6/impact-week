@@ -6,35 +6,35 @@ const auth = require('../middleware/auth')
 const fullQuestionController = require('../controller/fullQuestionController')
 const route = express.Router();
 
-route.get('/', userController.homePage);
+route.get('/', auth.checkHomePageToken, userController.homePage);
 route.post('/new-account', userController.signUp);
 route.post('/login', userController.logIn);
 
 route.get('/outh', userController.loginUser);
 
-route.get('/addQuestion', userController.questionAddition);
+route.get('/addQuestion', auth.checkUserToken, userController.questionAddition);
 
-route.post('/postQuestion', userController.postQuestion);
+route.post('/postQuestion', auth.checkUserToken, userController.postQuestion);
 
 //see full question 
 
-route.get('/question/:id', fullQuestionController.getQuestionDetails);
+route.get('/question/:id', auth.checkHomePageToken, fullQuestionController.getQuestionDetails);
 
 
 // edit question
-route.get('/question/edit/:id', fullQuestionController.editQuestion);
-route.post('/update-question/:id', fullQuestionController.updateQuestion);
+route.get('/question/edit/:id', auth.checkUserToken, fullQuestionController.editQuestion);
+route.post('/update-question/:id', auth.checkUserToken, fullQuestionController.updateQuestion);
 
 //delete question
-route.post('/delete-question/:id', fullQuestionController.deleteQuestion);
+route.post('/delete-question/:id', auth.checkUserToken, fullQuestionController.deleteQuestion);
 
 //comment a question
 
-route.post('/question/:id/comment',fullQuestionController.addComment);
+route.post('/question/:id/comment', auth.checkUserToken, fullQuestionController.addComment);
 
 //Delete the comment of a question
 
-route.post('/question/:question/delete-comment/:id',fullQuestionController.deleteComment);
+route.post('/question/:question/delete-comment/:id', auth.checkUserToken, fullQuestionController.deleteComment);
 
 
 

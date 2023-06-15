@@ -16,16 +16,19 @@
 
     <div>
     <h2>Matrix Master Community</h2>
-    <a href="/addQuestion"><button class="btn btn-success">Add Question</button></a>
+    <% if(user) { %>
+        <a href="/addQuestion"><button class="btn btn-success">Add Question</button></a>
+    <% } %>
+
     </div>
 
     <div class="user-list">
-        <% for (let i=0; i<user.length; i++) { %>
+        <% for (let i=0; i<question.length; i++) { %>
          <div class="user-list-container">
-            <h3 class="que"><span><%= user[i].question %></span></h3>
-            <p class="des"><%= user[i].desc.slice(0, 50) %></p>
-            <p><%= user[i].createdAt %></p>
-            <a href="/question/<%=user[i]._id %>">See more...</a>
+            <h3 class="que"><span><%= question[i].question %></span></h3>
+            <p class="des"><%= question[i].desc.slice(0, 50) %></p>
+            <p><%= question[i].createdAt %></p>
+            <a href="/question/<%=question[i]._id %>">See more...</a>
          </div>
 
          <% } %>

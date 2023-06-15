@@ -5,7 +5,8 @@ const moment = require("moment");
 const getQuestionDetails = (req, res) => {
   question
     .findById(req.params.id)
-    .populate("comments")
+    .populate('userId')
+    .populate({path: 'comments', populate: {path: 'userId'}})
     .then((result) => {
       res.render("fullQuestionAndComments", {
         question: {
@@ -23,13 +24,13 @@ const editQuestion = (req, res) => {
   question
     .findById(req.params.id)
     .then((result) => {
-     /*  console.log({
-        ...result._doc,
-        formattedDate: moment(result.createdAt).format("YYYY-MM-DD"),
-      }); */
-      res.render("editQuestion", {
-        question: { ...result._doc },
-      });
+        if(res.locals.userId.toString() === result.userId.toString()) {
+            res.render("editQuestion", {
+                question: { ...result._doc },
+              });        
+        } else {
+            res.redirect('/')
+        }
     })
     .catch((err) => {
       res.render("404");
@@ -61,6 +62,7 @@ const addComment = (req, res) => {
   let newComment = new comment({
     ...req.body,
     questionId: req.params.id,
+    userId: res.locals.userId
   });
 
   newComment

@@ -1,28 +1,50 @@
-// const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
-// const checkHomePageToken = (req, res, next) => {
+const checkHomePageToken = (req, res, next) => {
     
-//     let token = req.header("cookie");
+    let token = req.cookies.userToken;
+    if(!token){
+        res.locals.user = false;
+        next();
+    }else{
+        jwt.verify(token, process.env.JWT_TEXT, async (err, userInfo) => {
+            if(err){
+                console.log(err);
+                res.locals.user = false;
+            } else {
+                res.locals.user = userInfo.existedUser.userName;
+                res.locals.email = userInfo.existedUser.email;
+                res.locals.userId = userInfo.existedUser._id;
+            }
+        })
+        next();
+    }
 
-//     if(!token){
-//         next();
-//     }else{
-//         res.redirect('/');
-//     }
+}
 
-// }
+const checkUserToken = (req, res, next) => {
+    let token = req.cookies.userToken;
 
-// const checkUserToken = (req, res, next) => {
-//     let token = req.header("cookie");
+    if(token){
+        jwt.verify(token, process.env.JWT_TEXT, async (err, userInfo) => {
+            if(err){
+                console.log(err);
+                res.locals.user = false;
+                res.redirect('/')        
+            } else {
+                res.locals.user = userInfo.existedUser.userName;
+                res.locals.email = userInfo.existedUser.email;
+                res.locals.userId = userInfo.existedUser._id;
+                next();
+            }
+        })
+    } else {
+        res.locals.user = false;
+        res.redirect('/')
+    }
+}
 
-//     if(token){
-//         next();
-//     }else{
-//         res.redirect('outh');
-//     }
-// }
-
-// module.exports = {
-//     checkUserToken,
-//     checkHomePageToken
-// }
+module.exports = {
+    checkUserToken,
+    checkHomePageToken
+}
