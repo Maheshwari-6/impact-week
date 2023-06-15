@@ -12,12 +12,19 @@
     
     <div>
     <a href="/outh"><button class="btn btn-warning">Login</button></a>
+    <form action="/logout" method="post">
+        <a href="/logout"><button class="btn btn-danger">Logout</button></a>
+   </form>
     </div>
 
     <div>
     <h2>Matrix Master Community</h2>
     <% if(user) { %>
         <a href="/addQuestion"><button class="btn btn-success">Add Question</button></a>
+    <% } %>
+
+    <% if(user) { %>
+        <h2>Logged as <%= user%></h2>
     <% } %>
 
     </div>
