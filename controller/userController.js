@@ -66,6 +66,7 @@ const logIn = async (req, res) => {
     
     if(!existedUser) {
      res.render('outh', {
+
          error : "user is not exist. So signup first please!",
          
      })
