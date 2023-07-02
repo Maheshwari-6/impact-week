@@ -14,8 +14,10 @@ route.post('/logout',  userController.logOut);
 route.get('/outh', userController.loginUser);
 
 route.get('/addQuestion', auth.checkUserToken, userController.questionAddition);
+route.get('/addQuestionChat', auth.checkUserToken, userController.questionAdditionChat);
 
 route.post('/postQuestion', auth.checkUserToken, userController.postQuestion);
+route.post('/postQuestionChatGPT', auth.checkUserToken, userController.postQuestionChatGPT);
 
 //see full question 
 
