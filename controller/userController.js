@@ -68,7 +68,7 @@ const chatWithOpenAI = async (question) => {
         ]
       }, {
         headers: {
-          'Authorization': 'Bearer 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',
+          'Authorization': `Bearer ${process.env.CHAT_GPT_KEY}`,
           'Content-Type': 'application/json'
         }
       });
