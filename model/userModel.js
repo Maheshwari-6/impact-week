@@ -13,7 +13,7 @@ const userSchema = new schema({
         required : true
     },
     comments: [{ type: schema.Types.ObjectId, ref: 'comment' }],
-    chatGPTAnswer: {
+    chatGPTReply: {
         type: String, 
         required : false
     },

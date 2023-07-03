@@ -50,7 +50,11 @@ const postQuestionChatGPT = (req,res) =>{
     .then((result) => {
         console.log(result)
         chatWithOpenAI(result.desc).then(chatGPTResponse => {
-            res.render('askChat', {questionTitle: result.question, questionDescription: result.desc, chatGPTResponse: chatGPTResponse, questionId: result.id})
+            result.chatGPTReply = chatGPTResponse
+            result.save().then(result => {
+                console.log(result)
+                res.render('askChat', {questionTitle: result.question, questionDescription: result.desc, chatGPTResponse: chatGPTResponse, questionId: result.id})
+            })
         });
 
     })
@@ -112,6 +116,25 @@ const signUp = async (req, res) => {
     }
 }
 
+const updateQuestionWithReply = (questionId, chatGPTReply) => {
+    user.findById(questionId)
+      .then((question) => {
+        // Update the question with the Chat GPT reply
+        question.chatGPTReply = chatGPTReply;
+  
+        // Save the updated question to the database
+        return question.save();
+      })
+      .then((updatedQuestion) => {
+        console.log('Question updated:', updatedQuestion);
+        // Handle any additional logic or response
+      })
+      .catch((error) => {
+        console.error('Error updating question:', error);
+        // Handle the error
+      });
+  };
+
 const logIn = async (req, res) => {
     //Check if the user is already in the DB 
     let existedUser = await signupModel.findOne({email: req.body.email});
@@ -152,5 +175,6 @@ module.exports = {
     logIn,
     logOut,
     questionAdditionChat,
-    postQuestionChatGPT
+    postQuestionChatGPT,
+    updateQuestionWithReply
 }

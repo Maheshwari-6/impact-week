@@ -19,6 +19,9 @@ route.get('/addQuestionChat', auth.checkUserToken, userController.questionAdditi
 route.post('/postQuestion', auth.checkUserToken, userController.postQuestion);
 route.post('/postQuestionChatGPT', auth.checkUserToken, userController.postQuestionChatGPT);
 
+
+
+
 //see full question 
 
 route.get('/question/:id', auth.checkHomePageToken, fullQuestionController.getQuestionDetails);
