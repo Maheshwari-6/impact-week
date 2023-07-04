@@ -12,7 +12,12 @@ const userSchema = new schema({
         type: String, 
         required : true
     },
-    comments: [{ type: schema.Types.ObjectId, ref: 'comment' }]
+    comments: [{ type: schema.Types.ObjectId, ref: 'comment' }],
+    chatGPTReply: {
+        type: String, 
+        required : false
+    },
+
 }, {timestamps:true})
 
 

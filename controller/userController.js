@@ -2,6 +2,8 @@ const user = require('../model/userModel');
 const signupModel = require('../model/signupModel');
 let bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
+
 
 
 const homePage = (req, res) => { 
@@ -21,6 +23,15 @@ const questionAddition = (req, res) => {
     .catch(err => console.log(err))
 }
 
+
+const questionAdditionChat = (req, res) => {    
+    user.find()
+    .then((err) => res.render('askChat', { questionTitle: false, questionDescription: false, chatGPTResponse: false, questionId: false }))
+    .catch(err => console.log(err))
+}
+
+
+
 const postQuestion = (req,res) =>{
     let newUser = new user({
         ...req.body,
@@ -30,6 +41,60 @@ const postQuestion = (req,res) =>{
     .then((result) => res.redirect('/'))
     .catch(err => res.render('addQuestion'))
 }
+
+const postQuestionChatGPT = (req,res) =>{
+    let newUser = new user({
+        ...req.body,
+        userId: res.locals.userId
+      });
+    newUser.save()
+    .then((result) => {
+        console.log(result)
+        chatWithOpenAI(result.desc).then(chatGPTResponse => {
+            res.render('askChat', {questionTitle: result.question, questionDescription: result.desc, chatGPTResponse: chatGPTResponse, questionId: result.id})
+        })
+    })
+}
+
+const addAnswerToQuestion = (req, res) => {
+    console.log(req.body)
+    user.findById(req.params.id).then(question => {
+        question.chatGPTReply = req.body.answer
+        question.save().then(result => {
+            res.redirect('/')
+        })
+    })
+}
+
+
+
+const chatWithOpenAI = async (question) => {
+    try {
+      const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'user', content: question }
+        ]
+      }, {
+        headers: {
+          'Authorization': `Bearer ${process.env.CHAT_GPT_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      // Extract the assistant's reply from the response
+      const reply = response.data.choices[0].message.content;
+      console.log(reply);
+      return reply;
+    } catch (error) {
+      console.error(error.response.data);
+      throw error;
+    }
+  };
+
+
+ 
 
 const signUp = async (req, res) => {
     //Check if the user is already in the DB 
@@ -98,5 +163,8 @@ module.exports = {
     postQuestion,
     signUp,
     logIn,
-    logOut
+    logOut,
+    questionAdditionChat,
+    postQuestionChatGPT,
+    addAnswerToQuestion,
 }

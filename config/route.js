@@ -14,8 +14,13 @@ route.post('/logout',  userController.logOut);
 route.get('/outh', userController.loginUser);
 
 route.get('/addQuestion', auth.checkUserToken, userController.questionAddition);
+route.get('/addQuestionChat', auth.checkUserToken, userController.questionAdditionChat);
 
 route.post('/postQuestion', auth.checkUserToken, userController.postQuestion);
+route.post('/postQuestionChatGPT', auth.checkUserToken, userController.postQuestionChatGPT);
+
+
+
 
 //see full question 
 
@@ -36,6 +41,9 @@ route.post('/question/:id/comment', auth.checkUserToken, fullQuestionController.
 //Delete the comment of a question
 
 route.post('/question/:question/delete-comment/:id', auth.checkUserToken, fullQuestionController.deleteComment);
+
+//Accept chatgpt answer
+route.post('/question/:id/answer', auth.checkUserToken, userController.addAnswerToQuestion)
 
 
 

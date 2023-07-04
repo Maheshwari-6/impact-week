@@ -37,8 +37,17 @@
 
         </form>
 
+        
+        <div class="chat-gpt-response">
+            <% if (question.chatGPTReply) { %>
+                <h3>Chat GPT Reply:</h3>
+                <p><%= question.chatGPTReply %></p>
+                
+            <% } %>
+        </div>
 
         <% if(user) { %>
+            
             <form action="/question/<%=question._id %>/comment" method="post" id="form-add-question" >
         
                 <div class="adding-comment">

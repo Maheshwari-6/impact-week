@@ -8,6 +8,7 @@ const getQuestionDetails = (req, res) => {
     .populate('userId')
     .populate({path: 'comments', populate: {path: 'userId'}})
     .then((result) => {
+      console.log(result)
       res.render("fullQuestionAndComments", {
         question: {
           ...result._doc,
