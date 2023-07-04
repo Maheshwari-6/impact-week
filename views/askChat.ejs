@@ -24,14 +24,22 @@
                 <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+        </form>
     <% } %>
 
+    <!-- view with add chat gpt response -->
     <% if(questionTitle) { %>
         <p><%=questionTitle%></p>
         <p><%=questionDescription%></p>
         <p> <%=chatGPTResponse%></p>
-      
+        <form action="/question/<%=questionId%>/answer" method="post">
+            <div class="mb-3">
+                <input type="hidden" name="answer" class="form-control" id="chatGptInput" value="<%=chatGPTResponse%>">
+            </div>
+            <button type="submit" class="btn btn-primary">Accept reply</button>
+        </form>
+        <a href="/"><button type="submit" class="btn btn-primary">Decline reply</button>
+        </a>                   
     <% } %>
 
 </body>

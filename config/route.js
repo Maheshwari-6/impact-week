@@ -42,6 +42,9 @@ route.post('/question/:id/comment', auth.checkUserToken, fullQuestionController.
 
 route.post('/question/:question/delete-comment/:id', auth.checkUserToken, fullQuestionController.deleteComment);
 
+//Accept chatgpt answer
+route.post('/question/:id/answer', auth.checkUserToken, userController.addAnswerToQuestion)
+
 
 
 module.exports = route;
